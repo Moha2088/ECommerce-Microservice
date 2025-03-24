@@ -1,6 +1,5 @@
 ﻿
 using Catalog.API.Products.GetProductById;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Products.DeleteProject;
 

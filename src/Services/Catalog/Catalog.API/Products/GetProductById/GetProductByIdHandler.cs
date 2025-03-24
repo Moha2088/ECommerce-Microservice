@@ -10,8 +10,12 @@ internal class GetProductByIdQueryHandler(IDocumentSession documentSession) : IQ
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        var product = await documentSession .LoadAsync<Product>(request.Id, cancellationToken) ??
-            throw new ProductNotFoundException();
+        var product = await documentSession .LoadAsync<Product>(request.Id, cancellationToken);
+
+        if(product == null)
+        {
+            throw new ProductNotFoundException(request.Id);
+        }
          
         return new GetProductByIdResult(product);
     }

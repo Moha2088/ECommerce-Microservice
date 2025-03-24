@@ -10,9 +10,9 @@ internal class GetProductsByCategoryHandler(IDocumentSession documentSession) : 
 {
     public async Task<GetProductsByCategoryResult> Handle(GetProductsByCategoryQuery query, CancellationToken cancellationToken)
     {
-        var products = await documentSession.Query<Product>()    
+        var products = await documentSession.Query<Product>()
             .Where(x => x.Category.Contains(query.Category))
-            .ToListAsync(cancellationToken) ?? throw new ProductNotFoundException();
+            .ToListAsync(cancellationToken);
 
         return new GetProductsByCategoryResult(products);
     }
