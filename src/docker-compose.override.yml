@@ -21,6 +21,10 @@ services:
     volumes:
         - postgres_basket:/var/lib/postgresql/data/
     
+  distributedcache:
+    restart: always
+    ports:
+        - "6379:6379" 
   
   catalog.api:
     depends_on:

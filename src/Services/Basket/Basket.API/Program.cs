@@ -1,6 +1,8 @@
 
 
 using BuildingBlocks.Exceptions.Handler;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,7 @@ builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 
 builder.Services.AddStackExchangeRedisCache(opt =>
 {
-    opt.Configuration = builder.Configuration.GetConnectionString("Redis");
+    opt.Configuration = builder.Configuration.GetConnectionString("Redis") ?? throw new InvalidOperationException("Redis ConnectionString not found!");
 });
 
 builder.Services.AddCarter();
@@ -31,11 +33,18 @@ builder.Services.AddMediatR(opt =>
 });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DBConnection")!)
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 var app = builder.Build();
 
 // Configure the HTTPS request pipeline
 app.MapCarter();
 app.UseExceptionHandler(_ => { });
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
