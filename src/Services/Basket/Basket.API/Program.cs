@@ -1,6 +1,7 @@
 
 
 using BuildingBlocks.Exceptions.Handler;
+using Discount.gRPC;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -22,6 +23,20 @@ builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 builder.Services.AddStackExchangeRedisCache(opt =>
 {
     opt.Configuration = builder.Configuration.GetConnectionString("Redis") ?? throw new InvalidOperationException("Redis ConnectionString not found!");
+});
+
+
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opt =>
+{
+    opt.Address = new Uri(builder.Configuration["gRPCSettings:DiscountUrl"]!);
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler
+    {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+
+    return handler;
 });
 
 builder.Services.AddCarter();

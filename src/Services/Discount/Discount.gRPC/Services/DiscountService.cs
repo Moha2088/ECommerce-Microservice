@@ -24,7 +24,7 @@ public class DiscountService(DiscountContext dbContext, ILogger<DiscountService>
     }
 
     public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
-    {
+        {
         var coupon = await dbContext.Coupon.FirstOrDefaultAsync(x => x.ProductName.Equals(request.ProductName));
 
         if (coupon is null)
@@ -70,5 +70,5 @@ public class DiscountService(DiscountContext dbContext, ILogger<DiscountService>
         {
             Success = true
         };
-            }
+    }
 }
