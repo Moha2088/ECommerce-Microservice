@@ -1,31 +1,20 @@
 namespace Ordering.Domain.Models;
-
-/// <summary>
-/// Aggregate root
-/// </summary>
 public class Order : Aggregate<OrderId>
 {
-    private readonly List<OrderItem> _orderItems = [];
+    private readonly List<OrderItem> _orderItems = new();
     public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
     public CustomerId CustomerId { get; private set; } = default!;
-
     public OrderName OrderName { get; private set; } = default!;
-
     public Address ShippingAddress { get; private set; } = default!;
-
     public Address BillingAddress { get; private set; } = default!;
-
     public Payment Payment { get; private set; } = default!;
-
     public OrderStatus Status { get; private set; } = OrderStatus.Pending;
-
     public decimal TotalPrice
     {
         get => OrderItems.Sum(x => x.Price * x.Quantity);
         private set { }
     }
-
 
     public static Order Create(OrderId id, CustomerId customerId, OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment)
     {
@@ -36,10 +25,12 @@ public class Order : Aggregate<OrderId>
             OrderName = orderName,
             ShippingAddress = shippingAddress,
             BillingAddress = billingAddress,
-            Payment = payment
+            Payment = payment,
+            Status = OrderStatus.Pending
         };
 
         order.AddDomainEvent(new OrderCreatedEvent(order));
+
         return order;
     }
 
@@ -63,10 +54,9 @@ public class Order : Aggregate<OrderId>
         _orderItems.Add(orderItem);
     }
 
-    public void Remove(ProductId id)
+    public void Remove(ProductId productId)
     {
-        var orderItem = _orderItems.SingleOrDefault(x => x.ProductId.Equals(id));
-
+        var orderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
         if (orderItem is not null)
         {
             _orderItems.Remove(orderItem);

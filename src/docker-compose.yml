@@ -26,6 +26,11 @@ services:
   distributedcache:
     image: redis
 
+  orderdb:
+    image: mcr.microsoft/mssql/server:latest
+
+
 volumes:
+  postgres_basket:
   postgres_catalog:
-  postgres_basket:  
+  # sqlserver_data:

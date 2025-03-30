@@ -3,21 +3,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Models;
 using Ordering.Domain.ValueObjects;
 
-namespace Ordering.Infrastructure.Data.EntityTypeConfigurations
+namespace Ordering.Infrastructure.Data.EntityTypeConfigurations;
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public void Configure(EntityTypeBuilder<Product> builder)
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
-        {
-            builder.HasKey(x => x.Id);
+        builder.HasKey(p => p.Id);
 
-            builder.Property(x => x.Id).HasConversion(
-                productId => productId.Value,
-                dbId => ProductId.Of(dbId));
+        builder.Property(p => p.Id).HasConversion(
+                        productId => productId.Value,
+                        dbId => ProductId.Of(dbId));
 
-            builder.Property(x => x.Name)
-                .HasMaxLength(100)
-                .IsRequired();
-        }
+        builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
     }
 }
