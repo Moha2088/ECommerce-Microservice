@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ordering.Applicaton.Orders.Commands.UpdateOrder
+﻿namespace Ordering.Applicaton.Orders.Commands.UpdateOrder
 {
     public class UpdateOrderHandler(IApplicationDbContext context) : ICommandHandler<UpdateOrderCommand, UpdateOrderResult>
     {
