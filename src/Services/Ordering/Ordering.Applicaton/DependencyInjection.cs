@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Ordering.Applicaton
 {
@@ -11,7 +7,10 @@ namespace Ordering.Applicaton
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            
+            services.AddMediatR(x =>
+            {
+                x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
             return services;
         }   
     }

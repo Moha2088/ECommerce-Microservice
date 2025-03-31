@@ -1,4 +1,5 @@
-﻿using Ordering.Infrastructure.Data.Interceptors;
+﻿using MediatR;
+using Ordering.Infrastructure.Data.Interceptors;
 
 namespace Ordering.Infrastructure
 {
@@ -7,9 +8,13 @@ namespace Ordering.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config.GetConnectionString("DBConnection");
-            services.AddDbContext<ApplicationDbContext>(opt =>
+
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DomainEventDispatcherInterceptor>();
+
+            services.AddDbContext<ApplicationDbContext>((sp, opt) =>
             {
-                opt.AddInterceptors(new AuditableEntityInterceptor());
+                opt.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
                 opt.UseSqlServer(connectionString);
             });
 
