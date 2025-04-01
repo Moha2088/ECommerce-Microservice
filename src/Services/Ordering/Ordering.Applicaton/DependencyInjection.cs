@@ -1,4 +1,6 @@
 ﻿using BuildingBlocks.Behaviors;
+using BuildingBlocks.Messaging.MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -6,7 +8,7 @@ namespace Ordering.Applicaton
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddMediatR(x =>
             {
@@ -14,6 +16,8 @@ namespace Ordering.Applicaton
                 x.AddOpenBehavior(typeof(ValidationBehavior<,>));
                 x.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
+
+            services.AddRabbitMQWithMassTransit(config, Assembly.GetExecutingAssembly()); // For subscribers
             return services;
         }   
     }

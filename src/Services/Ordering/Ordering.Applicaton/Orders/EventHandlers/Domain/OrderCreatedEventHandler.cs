@@ -1,4 +1,4 @@
-﻿namespace Ordering.Applicaton.Orders.EventHandlers
+﻿namespace Ordering.Applicaton.Orders.EventHandlers.Domain
 {
     public class OrderCreatedEventHandler(ILogger<OrderCreatedEventHandler> logger) : INotificationHandler<OrderCreatedEvent>
     {

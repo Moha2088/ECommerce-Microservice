@@ -7,7 +7,7 @@ namespace BuildingBlocks.Messaging.MassTransit;
 
 public static class RabbitMQExtensions
 {
-    public static IServiceCollection AddRabbitMQ(this IServiceCollection services,
+    public static IServiceCollection AddRabbitMQWithMassTransit(this IServiceCollection services,
          IConfiguration con, Assembly? assembly = null)
     {
         services.AddMassTransit(cfg =>

@@ -1,9 +1,11 @@
 
 
 using BuildingBlocks.Exceptions.Handler;
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.gRPC;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,8 @@ builder.Services.AddMediatR(opt =>
     opt.AddOpenBehavior(typeof(ValidationBehavior<,>));
     opt.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+
+builder.Services.AddRabbitMQWithMassTransit(builder.Configuration);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
