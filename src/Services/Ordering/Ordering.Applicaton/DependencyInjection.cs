@@ -2,6 +2,7 @@
 using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.FeatureManagement;
 using System.Reflection;
 
 namespace Ordering.Applicaton
@@ -17,7 +18,10 @@ namespace Ordering.Applicaton
                 x.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
 
+            services.AddFeatureManagement();
+
             services.AddRabbitMQWithMassTransit(config, Assembly.GetExecutingAssembly()); // For subscribers
+            
             return services;
         }   
     }

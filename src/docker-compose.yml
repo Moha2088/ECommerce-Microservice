@@ -29,8 +29,10 @@ services:
   orderdb:
     image: mcr.microsoft/mssql/server:latest
 
+  rabbitmq:
+    image: rabbitmq:management
+
 
 volumes:
   postgres_basket:
   postgres_catalog:
-  # sqlserver_data:
