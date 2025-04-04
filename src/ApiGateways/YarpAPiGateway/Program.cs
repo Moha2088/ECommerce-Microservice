@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ builder.Services.AddRateLimiter(opt =>
     {
         x.Window = TimeSpan.FromSeconds(10);
         x.PermitLimit = 5;
-        x.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        x.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 });
 
