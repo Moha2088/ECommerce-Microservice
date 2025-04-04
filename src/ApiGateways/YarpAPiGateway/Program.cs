@@ -21,6 +21,7 @@ builder.Services.AddRateLimiter(opt =>
 var app = builder.Build();
 // Configure the HTTP Request pipeline
 
+app.UseRateLimiter();
 app.MapReverseProxy();
 
 app.Run();
